@@ -1,6 +1,15 @@
 {
   "music": [
     {
+      "id": "m1789623709042",
+      "title": "I Appear Missing",
+      "color1": "#f30341",
+      "color2": "#060b0e",
+      "artist": "Queens of the Stone Age",
+      "year": 2013,
+      "cover": "assets/music/i-appear-missing-1789623707865.webp"
+    },
+    {
       "id": "m1",
       "title": "Ladies and Gentlemen We Are Floating in Space",
       "artist": "Spiritualized",
