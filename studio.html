@@ -13,6 +13,7 @@
       --sub: rgba(255, 255, 255, 0.55);
       --accent: #3b82f6;
       --success: #10b981;
+      --warning: #f59e0b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -28,11 +29,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
     }
-    h1 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+    h1 { font-size: 1.35rem; font-weight: 600; }
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--border);
@@ -42,7 +43,7 @@
       font-size: 0.8rem;
       cursor: pointer;
     }
-    /* Token Gate Overlay */
+    /* Auth Gate */
     #gate-screen {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -61,8 +62,8 @@
       color: #fff;
       border-radius: 6px;
     }
-    /* Workbench Layout */
-    .tabs { display: flex; gap: 10px; margin-bottom: 24px; }
+    /* Tabs */
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
     .tab-btn {
       background: transparent;
       border: 1px solid var(--border);
@@ -83,7 +84,7 @@
     }
     .form-group { margin-bottom: 18px; }
     label { display: block; font-size: 0.82rem; color: var(--sub); margin-bottom: 6px; }
-    input[type="text"], input[type="number"], select {
+    input[type="text"], select {
       width: 100%;
       padding: 10px 12px;
       background: #000;
@@ -92,7 +93,7 @@
       border-radius: 6px;
       font-size: 0.9rem;
     }
-    /* Eyedropper Canvas Area */
+    /* Color Eyedropper */
     .canvas-box {
       margin-top: 10px;
       text-align: center;
@@ -110,7 +111,7 @@
     }
     .color-swatches {
       display: flex;
-      gap: 16px;
+      gap: 14px;
       margin-top: 14px;
       align-items: center;
       justify-content: center;
@@ -119,32 +120,29 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 14px;
+      padding: 8px 16px;
       background: rgba(255,255,255,0.06);
       border: 2px solid transparent;
       border-radius: 8px;
       cursor: pointer;
       color: #fff;
       font-size: 0.85rem;
-      transition: all 0.15s ease;
     }
     .swatch-btn.active { 
       border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.15);
+      background: rgba(59, 130, 246, 0.2);
     }
     .swatch-circle { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); }
-    /* Live Gradient Preview */
     .preview-box {
-      height: 90px;
-      border-radius: 10px;
-      margin-top: 16px;
+      height: 85px;
+      border-radius: 8px;
+      margin-top: 14px;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.85rem;
       color: rgba(255,255,255,0.8);
-      letter-spacing: 0.05em;
     }
     .btn-primary {
       background: #fff;
@@ -157,89 +155,80 @@
       font-size: 0.92rem;
       cursor: pointer;
       margin-top: 10px;
-      transition: opacity 0.2s;
     }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    
+    /* Reorder Board */
+    .reorder-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
     .btn-save-order {
       background: var(--success);
       color: #fff;
       font-weight: 600;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 9px 18px;
+      border-radius: 7px;
       border: none;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-      transition: opacity 0.2s;
     }
-    .btn-save-order:disabled { opacity: 0.35; cursor: not-allowed; }
-    /* Reorder / Manage List */
+    .btn-save-order:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      background: #333;
+    }
     .item-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px;
+      padding: 10px 14px;
       background: rgba(0,0,0,0.5);
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 10px;
-      cursor: grab;
-      user-select: none;
-      transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+      margin-bottom: 8px;
     }
-    .item-row.dragging {
-      opacity: 0.4;
-      background: rgba(59, 130, 246, 0.2);
+    .item-left { display: flex; align-items: center; gap: 12px; }
+    .order-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--sub);
+      width: 26px;
     }
-    .item-row.drag-over {
-      border-color: var(--accent);
-      transform: scale(1.01);
-    }
-    .item-meta { display: flex; align-items: center; gap: 14px; pointer-events: none; }
-    .drag-handle { color: var(--sub); font-size: 1.1rem; padding-right: 4px; }
     .item-thumb { width: 44px; height: 44px; object-fit: cover; border-radius: 5px; background: #222; }
-    .action-btns { display: flex; gap: 6px; align-items: center; }
+    .action-btns { display: flex; gap: 6px; }
     .action-btns button {
       background: rgba(255,255,255,0.08);
       border: 1px solid var(--border);
       color: #fff;
-      padding: 6px 10px;
-      border-radius: 5px;
+      padding: 7px 12px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.8rem;
-      line-height: 1;
+      font-size: 0.85rem;
+      font-weight: bold;
     }
     .action-btns button:hover:not(:disabled) { background: rgba(255,255,255,0.2); }
-    .action-btns button:disabled { opacity: 0.25; cursor: not-allowed; }
+    .action-btns button:disabled { opacity: 0.2; cursor: not-allowed; }
     .action-btns button.del:hover { background: #e11d48; border-color: #e11d48; }
-    #status-bar {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      text-align: center;
-      min-height: 20px;
-      color: #93c5fd;
-    }
-    #reorder-status {
-      font-size: 0.82rem;
-      margin-left: 12px;
-      color: #facc15;
-    }
+    #status-bar { margin-top: 14px; font-size: 0.85rem; text-align: center; color: #93c5fd; }
+    #reorder-status { font-size: 0.82rem; color: var(--warning); }
   </style>
 </head>
 <body>
   <div class="studio-shell">
-    <!-- Screen 1: Token Gate -->
+    <!-- Token Gate -->
     <div id="gate-screen">
       <h2>Studio Authorization</h2>
-      <p style="font-size: 0.82rem; color: var(--sub); margin-top: 8px;">Enter your GitHub Personal Access Token to manage your wall.</p>
+      <p style="font-size: 0.82rem; color: var(--sub); margin-top: 8px;">Enter your GitHub Personal Access Token</p>
       <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
       <button class="btn-primary" id="save-token-btn">Unlock Studio</button>
     </div>
 
-    <!-- Screen 2: Studio Workbench -->
+    <!-- Workbench -->
     <div id="workbench" style="display: none;">
       <header>
         <h1>Curator Studio</h1>
@@ -251,7 +240,7 @@
         <button class="tab-btn" data-tab="manage">Manage & Reorder Wall</button>
       </div>
 
-      <!-- Tab: Create / Edit -->
+      <!-- Create Tab -->
       <section id="tab-create" class="panel">
         <div class="form-group">
           <label>Target Medium</label>
@@ -264,32 +253,31 @@
 
         <div class="form-group">
           <label>Title</label>
-          <input type="text" id="entry-title" placeholder="e.g., Ode to the Mets">
+          <input type="text" id="entry-title" placeholder="Title">
         </div>
 
         <div class="form-group">
           <label id="label-secondary">Artist</label>
-          <input type="text" id="entry-secondary" placeholder="e.g., The Strokes">
+          <input type="text" id="entry-secondary" placeholder="Artist name">
         </div>
 
         <div class="form-group">
           <label id="label-tertiary">Release Year</label>
-          <input type="text" id="entry-tertiary" placeholder="e.g., 2020">
+          <input type="text" id="entry-tertiary" placeholder="2024">
         </div>
 
         <div class="form-group" id="quote-group" style="display: none;">
           <label>Standout Quote / Dialogue</label>
-          <input type="text" id="entry-quote" placeholder="e.g., All the best memories are hers.">
+          <input type="text" id="entry-quote" placeholder="Key line from film or show">
         </div>
 
         <div class="form-group">
-          <label id="label-file">Artwork Upload (1:1 for Music, 16:9 for Screen)</label>
+          <label id="label-file">Artwork Upload</label>
           <input type="file" id="entry-file" accept="image/*">
           <div class="canvas-box">
-            <p id="canvas-hint" style="font-size: 0.78rem; color: var(--sub); margin-bottom: 8px;">Upload image to activate manual eyedropper</p>
+            <p id="canvas-hint" style="font-size: 0.8rem; color: var(--sub); margin-bottom: 10px;">Upload image to activate eyedropper</p>
             <canvas id="pick-canvas"></canvas>
             <div class="color-swatches">
-              <span style="font-size: 0.8rem; color: var(--sub);">Active Target:</span>
               <button class="swatch-btn active" id="btn-pick-c1" type="button">
                 <span class="swatch-circle" id="circle-c1" style="background: #1e3a5f;"></span> Color 1
               </button>
@@ -305,20 +293,20 @@
         <p id="status-bar"></p>
       </section>
 
-      <!-- Tab: Manage & Reorder -->
+      <!-- Manage Tab -->
       <section id="tab-manage" class="panel" style="display: none;">
-        <div class="form-group">
-          <label>Select Wall to Reorder</label>
-          <select id="manage-medium">
-            <option value="music">Music</option>
-            <option value="cinema">Cinema</option>
-            <option value="tv">TV</option>
-          </select>
-        </div>
-
-        <div style="display: flex; align-items: center; margin-bottom: 12px;">
-          <button class="btn-save-order" id="save-order-btn" disabled>Save Wall Sequence</button>
-          <span id="reorder-status"></span>
+        <div class="reorder-header">
+          <div style="flex: 1; max-width: 240px;">
+            <select id="manage-medium">
+              <option value="music">Music Wall</option>
+              <option value="cinema">Cinema Wall</option>
+              <option value="tv">TV Wall</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span id="reorder-status"></span>
+            <button class="btn-save-order" id="save-order-btn" disabled>Save Wall Sequence</button>
+          </div>
         </div>
 
         <div id="manage-list"></div>
@@ -326,6 +314,427 @@
     </div>
   </div>
 
-  <script src="studio.js"></script>
+  <script>
+    const REPO_OWNER = 'shuklaakshansh0-crypto';
+    const REPO_NAME = 'Master-Gallery';
+
+    let currentToken = localStorage.getItem('gallery_token') || '';
+    let activeColorSlot = 1; // 1 or 2
+    let color1 = '#1e3a5f';
+    let color2 = '#0d1b2a';
+    let processedWebPBlob = null;
+    let currentDb = null;
+    let hasUnsavedOrder = false;
+
+    // Elements
+    const gateScreen = document.getElementById('gate-screen');
+    const workbench = document.getElementById('workbench');
+    const tokenInput = document.getElementById('token-input');
+    const saveTokenBtn = document.getElementById('save-token-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const mediumSelect = document.getElementById('entry-medium');
+    const labelSec = document.getElementById('label-secondary');
+    const labelTert = document.getElementById('label-tertiary');
+    const quoteGroup = document.getElementById('quote-group');
+    const labelFile = document.getElementById('label-file');
+
+    const fileInput = document.getElementById('entry-file');
+    const canvas = document.getElementById('pick-canvas');
+    const ctx = canvas.getContext('2d');
+    const btnPickC1 = document.getElementById('btn-pick-c1');
+    const btnPickC2 = document.getElementById('btn-pick-c2');
+    const circleC1 = document.getElementById('circle-c1');
+    const circleC2 = document.getElementById('circle-c2');
+    const gradientPreview = document.getElementById('gradient-preview');
+    const canvasHint = document.getElementById('canvas-hint');
+
+    const publishBtn = document.getElementById('publish-btn');
+    const statusBar = document.getElementById('status-bar');
+
+    const manageSelect = document.getElementById('manage-medium');
+    const manageList = document.getElementById('manage-list');
+    const saveOrderBtn = document.getElementById('save-order-btn');
+    const reorderStatus = document.getElementById('reorder-status');
+
+    // Init Auth
+    if (currentToken) {
+      gateScreen.style.display = 'none';
+      workbench.style.display = 'block';
+      loadDatabase();
+    }
+
+    saveTokenBtn.addEventListener('click', () => {
+      const val = tokenInput.value.trim();
+      if (!val) return;
+      localStorage.setItem('gallery_token', val);
+      currentToken = val;
+      gateScreen.style.display = 'none';
+      workbench.style.display = 'block';
+      loadDatabase();
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('gallery_token');
+      location.reload();
+    });
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('tab-create').style.display = tab === 'create' ? 'block' : 'none';
+        document.getElementById('tab-manage').style.display = tab === 'manage' ? 'block' : 'none';
+        if (tab === 'manage') renderManageList();
+      });
+    });
+
+    // Form Schema
+    mediumSelect.addEventListener('change', () => {
+      const m = mediumSelect.value;
+      if (m === 'music') {
+        labelSec.textContent = 'Artist';
+        labelTert.textContent = 'Release Year';
+        labelFile.textContent = 'Artwork (1:1 Square)';
+        quoteGroup.style.display = 'none';
+      } else if (m === 'cinema') {
+        labelSec.textContent = 'Director';
+        labelTert.textContent = 'Release Year';
+        labelFile.textContent = 'Cinematic Still (16:9 Widescreen)';
+        quoteGroup.style.display = 'block';
+      } else if (m === 'tv') {
+        labelSec.textContent = 'Creator';
+        labelTert.textContent = 'Season Count (e.g., 4 Seasons)';
+        labelFile.textContent = 'Series Still (16:9 Widescreen)';
+        quoteGroup.style.display = 'block';
+      }
+    });
+
+    // Color Slot Selection: Explicit manual switching only
+    btnPickC1.addEventListener('click', () => {
+      activeColorSlot = 1;
+      btnPickC1.classList.add('active');
+      btnPickC2.classList.remove('active');
+      canvasHint.textContent = 'Active: Color 1. Tap the image to sample.';
+    });
+
+    btnPickC2.addEventListener('click', () => {
+      activeColorSlot = 2;
+      btnPickC2.classList.add('active');
+      btnPickC1.classList.remove('active');
+      canvasHint.textContent = 'Active: Color 2. Tap the image to sample.';
+    });
+
+    function updateGradientDisplay() {
+      circleC1.style.background = color1;
+      circleC2.style.background = color2;
+      gradientPreview.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+    }
+    updateGradientDisplay();
+
+    // Image Upload & Canvas Prep
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const img = new Image();
+      img.onload = () => {
+        const isMusic = mediumSelect.value === 'music';
+        const targetW = isMusic ? 400 : 640;
+        const targetH = isMusic ? 400 : 360;
+
+        canvas.width = targetW;
+        canvas.height = targetH;
+        ctx.drawImage(img, 0, 0, targetW, targetH);
+        canvas.style.display = 'inline-block';
+        canvasHint.textContent = `Tap image to set Color ${activeColorSlot} (switch above anytime).`;
+
+        canvas.toBlob((blob) => {
+          processedWebPBlob = blob;
+        }, 'image/webp', 0.85);
+      };
+      img.src = URL.createObjectURL(file);
+    });
+
+    // Canvas Tap: Strictly updates the active slot with NO auto-switching
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+
+      const pixel = ctx.getImageData(x, y, 1, 1).data;
+      const hex = '#' + ((1 << 24) + (pixel[0] << 16) + (pixel[1] << 8) + pixel[2]).toString(16).slice(1);
+
+      if (activeColorSlot === 1) {
+        color1 = hex;
+        canvasHint.textContent = `Set Color 1 to ${hex}. Tap Color 2 button above when ready.`;
+      } else {
+        color2 = hex;
+        canvasHint.textContent = `Set Color 2 to ${hex}. Tap Color 1 button above when ready.`;
+      }
+      updateGradientDisplay();
+    });
+
+    // GitHub API Database Fetch
+    async function loadDatabase() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+          headers: { 
+            Authorization: `Bearer ${currentToken}`,
+            'Cache-Control': 'no-cache'
+          }
+        });
+        if (!res.ok) throw new Error('Failed to load data.json');
+        const json = await res.json();
+        currentDb = JSON.parse(decodeURIComponent(escape(atob(json.content))));
+      } catch (err) {
+        console.error(err);
+        statusBar.textContent = 'Token error: Check repository permissions.';
+      }
+    }
+
+    async function getLatestSha() {
+      const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+        headers: { 
+          Authorization: `Bearer ${currentToken}`,
+          'Cache-Control': 'no-cache'
+        }
+      });
+      if (!res.ok) throw new Error('Could not get repository SHA');
+      const json = await res.json();
+      return json.sha;
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    // Publish Logic
+    publishBtn.addEventListener('click', async () => {
+      const title = document.getElementById('entry-title').value.trim();
+      const secondary = document.getElementById('entry-secondary').value.trim();
+      const tertiary = document.getElementById('entry-tertiary').value.trim();
+      const quote = document.getElementById('entry-quote').value.trim();
+      const medium = mediumSelect.value;
+
+      if (!title || !secondary || !tertiary || !processedWebPBlob) {
+        alert('Please complete all fields and select an image.');
+        return;
+      }
+
+      publishBtn.disabled = true;
+      statusBar.textContent = 'Compressing image & committing...';
+
+      try {
+        await loadDatabase();
+
+        const slug = title.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 24);
+        const filename = `${slug}-${Date.now()}.webp`;
+        const imagePath = `assets/${medium}/${filename}`;
+        const base64Data = await blobToBase64(processedWebPBlob);
+
+        // Commit WebP Asset
+        const imgRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imagePath}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Add ${medium} asset: ${title}`,
+            content: base64Data
+          })
+        });
+
+        if (!imgRes.ok) throw new Error('Failed to upload image asset');
+
+        const newEntry = {
+          id: `${medium[0]}${Date.now()}`,
+          title,
+          color1,
+          color2
+        };
+
+        if (medium === 'music') {
+          newEntry.artist = secondary;
+          newEntry.year = parseInt(tertiary, 10) || tertiary;
+          newEntry.cover = imagePath;
+        } else if (medium === 'cinema') {
+          newEntry.director = secondary;
+          newEntry.year = parseInt(tertiary, 10) || tertiary;
+          newEntry.still = imagePath;
+          newEntry.quote = quote;
+        } else {
+          newEntry.creator = secondary;
+          newEntry.seasons = tertiary;
+          newEntry.still = imagePath;
+          newEntry.quote = quote;
+        }
+
+        // Add to front of array
+        currentDb[medium].unshift(newEntry);
+
+        const sha = await getLatestSha();
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentDb, null, 2))));
+        const dbRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Curate ${title} to ${medium}`,
+            content: updatedContent,
+            sha: sha
+          })
+        });
+
+        if (!dbRes.ok) throw new Error('Failed to update data.json');
+
+        statusBar.textContent = 'Published! Wall will update in ~60s.';
+        document.getElementById('entry-title').value = '';
+        document.getElementById('entry-secondary').value = '';
+        document.getElementById('entry-tertiary').value = '';
+        document.getElementById('entry-quote').value = '';
+        canvas.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        statusBar.textContent = 'Publish error: ' + err.message;
+      } finally {
+        publishBtn.disabled = false;
+      }
+    });
+
+    // Reorder & Management Engine
+    manageSelect.addEventListener('change', () => {
+      hasUnsavedOrder = false;
+      saveOrderBtn.disabled = true;
+      reorderStatus.textContent = '';
+      renderManageList();
+    });
+
+    function renderManageList() {
+      if (!currentDb) return;
+      const medium = manageSelect.value;
+      const items = currentDb[medium];
+
+      manageList.innerHTML = items.map((item, index) => `
+        <div class="item-row">
+          <div class="item-left">
+            <span class="order-badge">#${index + 1}</span>
+            <img class="item-thumb" src="${item.cover || item.still}">
+            <div>
+              <strong style="font-size: 0.9rem;">${item.title}</strong>
+              <p style="font-size: 0.75rem; color: var(--sub);">${item.artist || item.director || item.creator}</p>
+            </div>
+          </div>
+          <div class="action-btns">
+            <button type="button" onclick="moveItem(${index}, -1)" ${index === 0 ? 'disabled' : ''}>↑ Up</button>
+            <button type="button" onclick="moveItem(${index}, 1)" ${index === items.length - 1 ? 'disabled' : ''}>↓ Down</button>
+            <button type="button" class="del" onclick="deleteItem(${index})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Local Array Swap: [↑ Up] moves toward #1 (earlier); [↓ Down] moves later
+    window.moveItem = (index, delta) => {
+      const medium = manageSelect.value;
+      const targetIndex = index + delta;
+      const list = currentDb[medium];
+
+      if (targetIndex < 0 || targetIndex >= list.length) return;
+
+      // Clean swap in memory
+      const temp = list[index];
+      list[index] = list[targetIndex];
+      list[targetIndex] = temp;
+
+      hasUnsavedOrder = true;
+      saveOrderBtn.disabled = false;
+      reorderStatus.textContent = 'Unsaved changes';
+
+      renderManageList();
+    };
+
+    // Commit Reorder: Fetches ONLY the latest SHA, never overwrites currentDb
+    saveOrderBtn.addEventListener('click', async () => {
+      if (!hasUnsavedOrder) return;
+
+      saveOrderBtn.disabled = true;
+      reorderStatus.textContent = 'Saving sequence...';
+
+      try {
+        const sha = await getLatestSha();
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentDb, null, 2))));
+
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Update ${manageSelect.value} wall sequence`,
+            content: updatedContent,
+            sha: sha
+          })
+        });
+
+        if (!res.ok) throw new Error('Commit failed');
+
+        hasUnsavedOrder = false;
+        reorderStatus.textContent = 'Saved! Wall updates in ~60s.';
+        setTimeout(() => { reorderStatus.textContent = ''; }, 4000);
+      } catch (err) {
+        console.error(err);
+        reorderStatus.textContent = 'Save error: ' + err.message;
+        saveOrderBtn.disabled = false;
+      }
+    });
+
+    // Delete Item
+    window.deleteItem = async (index) => {
+      const medium = manageSelect.value;
+      const item = currentDb[medium][index];
+      if (!confirm(`Delete "${item.title}" from the wall?`)) return;
+
+      currentDb[medium].splice(index, 1);
+      renderManageList();
+      reorderStatus.textContent = 'Deleting...';
+
+      try {
+        const sha = await getLatestSha();
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentDb, null, 2))));
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Delete ${item.title} from ${medium}`,
+            content: updatedContent,
+            sha: sha
+          })
+        });
+
+        if (!res.ok) throw new Error('Delete failed');
+        reorderStatus.textContent = 'Deleted.';
+        setTimeout(() => { reorderStatus.textContent = ''; }, 3000);
+      } catch (err) {
+        alert('Delete failed: ' + err.message);
+        reorderStatus.textContent = '';
+      }
+    };
+  </script>
 </body>
 </html>
