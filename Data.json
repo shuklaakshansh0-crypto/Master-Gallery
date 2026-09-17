@@ -1,0 +1,95 @@
+{
+  "music": [
+    {
+      "id": "m1",
+      "title": "Ladies and Gentlemen We Are Floating in Space",
+      "artist": "Spiritualized",
+      "year": 1997,
+      "cover": "assets/music/ladies-and-gentlemen.webp",
+      "color1": "#1e3a5f",
+      "color2": "#0d1b2a"
+    },
+    {
+      "id": "m2",
+      "title": "Ode to the Mets",
+      "artist": "The Strokes",
+      "year": 2020,
+      "cover": "assets/music/the-new-abnormal.webp",
+      "color1": "#c0392b",
+      "color2": "#2c3e50"
+    },
+    {
+      "id": "m3",
+      "title": "Empire Ants",
+      "artist": "Gorillaz",
+      "year": 2010,
+      "cover": "assets/music/plastic-beach.webp",
+      "color1": "#e67e22",
+      "color2": "#2c3e50"
+    }
+  ],
+  "cinema": [
+    {
+      "id": "c1",
+      "title": "Blade Runner 2049",
+      "director": "Denis Villeneuve",
+      "year": 2017,
+      "still": "assets/cinema/blade-runner-2049.webp",
+      "quote": "All the best memories are hers.",
+      "color1": "#d35400",
+      "color2": "#1a1a2e"
+    },
+    {
+      "id": "c2",
+      "title": "Interstellar",
+      "director": "Christopher Nolan",
+      "year": 2014,
+      "still": "assets/cinema/interstellar.webp",
+      "quote": "We used to look up at the sky and wonder at our place in the stars.",
+      "color1": "#2980b9",
+      "color2": "#000000"
+    },
+    {
+      "id": "c3",
+      "title": "There Will Be Blood",
+      "director": "Paul Thomas Anderson",
+      "year": 2007,
+      "still": "assets/cinema/there-will-be-blood.webp",
+      "quote": "I have a competition in me. I want no one else to succeed.",
+      "color1": "#4a2810",
+      "color2": "#111111"
+    }
+  ],
+  "tv": [
+    {
+      "id": "t1",
+      "title": "Succession",
+      "creator": "Jesse Armstrong",
+      "seasons": "4 Seasons",
+      "still": "assets/tv/succession.webp",
+      "quote": "You have to be a killer.",
+      "color1": "#34495e",
+      "color2": "#111111"
+    },
+    {
+      "id": "t2",
+      "title": "Severance",
+      "creator": "Dan Erickson",
+      "seasons": "2 Seasons",
+      "still": "assets/tv/severance.webp",
+      "quote": "Please try to enjoy each fact equally.",
+      "color1": "#16a085",
+      "color2": "#0f2027"
+    },
+    {
+      "id": "t3",
+      "title": "Better Call Saul",
+      "creator": "Vince Gilligan & Peter Gould",
+      "seasons": "6 Seasons",
+      "still": "assets/tv/better-call-saul.webp",
+      "quote": "Let justice be done though the heavens fall.",
+      "color1": "#d4ac0d",
+      "color2": "#1c2833"
+    }
+  ]
+}
