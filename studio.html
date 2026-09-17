@@ -365,7 +365,6 @@
     const saveOrderBtn = document.getElementById('save-order-btn');
     const reorderStatus = document.getElementById('reorder-status');
 
-    // Unicode-Safe Base64 Handlers
     function base64ToUtf8(str) {
       const clean = str.replace(/\s+/g, '');
       const binary = atob(clean);
@@ -385,7 +384,6 @@
       return btoa(binary);
     }
 
-    // Auth Init
     if (currentToken) {
       gateScreen.style.display = 'none';
       workbench.style.display = 'block';
@@ -407,7 +405,6 @@
       location.reload();
     });
 
-    // Tab Navigation
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -415,11 +412,16 @@
         const tab = btn.dataset.tab;
         document.getElementById('tab-create').style.display = tab === 'create' ? 'block' : 'none';
         document.getElementById('tab-manage').style.display = tab === 'manage' ? 'block' : 'none';
-        if (tab === 'manage') renderManageList();
+        if (tab === 'manage') {
+          if (!currentDb) {
+            loadDatabase();
+          } else {
+            renderManageList();
+          }
+        }
       });
     });
 
-    // Schema Selector
     mediumSelect.addEventListener('change', () => {
       const m = mediumSelect.value;
       if (m === 'music') {
@@ -440,7 +442,6 @@
       }
     });
 
-    // Manual Eyedropper Slot Selector
     btnPickC1.addEventListener('click', () => {
       activeColorSlot = 1;
       btnPickC1.classList.add('active');
@@ -462,7 +463,6 @@
     }
     updateGradientDisplay();
 
-    // Canvas Image Handler
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -504,34 +504,59 @@
       updateGradientDisplay();
     });
 
-    // Database Loader with UTF-8 Decoder
+    // Dual-strategy loader: Fast GitHub API + local fallback
     async function loadDatabase() {
+      manageList.innerHTML = `<div class="status-msg">Loading exhibition database...</div>`;
       try {
-        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
-          headers: { 
-            Authorization: `Bearer ${currentToken}`,
-            'Cache-Control': 'no-cache'
+        let loaded = null;
+
+        // Try GitHub API first
+        try {
+          const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json?t=${Date.now()}`, {
+            headers: {
+              'Authorization': `Bearer ${currentToken}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+          if (res.ok) {
+            const json = await res.json();
+            loaded = JSON.parse(base64ToUtf8(json.content));
+          } else if (res.status === 401 || res.status === 403) {
+            throw new Error(`Invalid GitHub Token (${res.status}). Lock studio and enter a valid token.`);
           }
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}: Check GitHub Token permissions`);
-        const json = await res.json();
-        const decoded = base64ToUtf8(json.content);
-        currentDb = JSON.parse(decoded);
+        } catch (apiErr) {
+          console.warn('API fetch warning:', apiErr);
+          if (apiErr.message.includes('Token')) throw apiErr;
+        }
+
+        // Direct local fallback if API was slow or had non-auth issue
+        if (!loaded) {
+          const localRes = await fetch(`data.json?t=${Date.now()}`);
+          if (!localRes.ok) throw new Error(`Could not load data.json (HTTP ${localRes.status})`);
+          loaded = await localRes.json();
+        }
+
+        currentDb = loaded;
         renderManageList();
       } catch (err) {
         console.error(err);
-        manageList.innerHTML = `<div class="status-msg error-msg">${err.message}</div>`;
+        manageList.innerHTML = `
+          <div class="status-msg error-msg">
+            <p><strong>Database Error:</strong> ${err.message}</p>
+            <button class="btn-secondary" onclick="loadDatabase()" style="margin-top: 10px;">Retry</button>
+          </div>
+        `;
       }
     }
 
     async function getLatestSha() {
-      const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
+      const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json?t=${Date.now()}`, {
         headers: { 
-          Authorization: `Bearer ${currentToken}`,
-          'Cache-Control': 'no-cache'
+          'Authorization': `Bearer ${currentToken}`,
+          'Accept': 'application/vnd.github.v3+json'
         }
       });
-      if (!res.ok) throw new Error('Could not retrieve repository file state');
+      if (!res.ok) throw new Error(`Could not get SHA: HTTP ${res.status}`);
       const json = await res.json();
       return json.sha;
     }
@@ -544,7 +569,6 @@
       });
     }
 
-    // Publish New Entry
     publishBtn.addEventListener('click', async () => {
       const title = document.getElementById('entry-title').value.trim();
       const secondary = document.getElementById('entry-secondary').value.trim();
@@ -553,12 +577,12 @@
       const medium = mediumSelect.value;
 
       if (!title || !secondary || !tertiary || !processedWebPBlob) {
-        alert('Please fill all fields and upload an image.');
+        alert('Please complete all fields and upload an image.');
         return;
       }
 
       publishBtn.disabled = true;
-      statusBar.textContent = 'Optimizing image & publishing...';
+      statusBar.textContent = 'Compressing image & publishing...';
 
       try {
         await loadDatabase();
@@ -571,8 +595,9 @@
         const imgRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imagePath}`, {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${currentToken}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
           },
           body: JSON.stringify({
             message: `Add ${medium} asset: ${title}`,
@@ -612,8 +637,9 @@
         const dbRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${currentToken}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
           },
           body: JSON.stringify({
             message: `Curate ${title} to ${medium}`,
@@ -624,7 +650,7 @@
 
         if (!dbRes.ok) throw new Error('Failed to update data.json');
 
-        statusBar.textContent = 'Published successfully. Live in ~60s.';
+        statusBar.textContent = 'Published! Wall will update in ~60s.';
         document.getElementById('entry-title').value = '';
         document.getElementById('entry-secondary').value = '';
         document.getElementById('entry-tertiary').value = '';
@@ -639,7 +665,6 @@
       }
     });
 
-    // Reorder List Renderer
     manageSelect.addEventListener('change', () => {
       hasUnsavedOrder = false;
       saveOrderBtn.disabled = true;
@@ -679,7 +704,6 @@
       `).join('');
     }
 
-    // In-Memory Reorder Swap
     window.moveItem = (index, delta) => {
       const medium = manageSelect.value;
       const targetIndex = index + delta;
@@ -698,7 +722,6 @@
       renderManageList();
     };
 
-    // Save Reordered Sequence
     saveOrderBtn.addEventListener('click', async () => {
       if (!hasUnsavedOrder) return;
 
@@ -712,8 +735,9 @@
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${currentToken}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
           },
           body: JSON.stringify({
             message: `Update ${manageSelect.value} wall sequence`,
@@ -722,7 +746,7 @@
           })
         });
 
-        if (!res.ok) throw new Error('Failed to commit order');
+        if (!res.ok) throw new Error('Commit failed');
 
         hasUnsavedOrder = false;
         reorderStatus.textContent = 'Saved! Live in ~60s.';
@@ -734,7 +758,6 @@
       }
     });
 
-    // Delete Entry
     window.deleteItem = async (index) => {
       const medium = manageSelect.value;
       const item = currentDb[medium][index];
@@ -750,8 +773,9 @@
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
           method: 'PUT',
           headers: {
-            Authorization: `Bearer ${currentToken}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${currentToken}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
           },
           body: JSON.stringify({
             message: `Delete ${item.title} from ${medium}`,
